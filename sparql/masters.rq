@@ -1,0 +1,20 @@
+PREFIX lla: <http://data.llgc.org.uk/lla/def#>
+PREFIX bio: <http://purl.org/vocab/bio/0.1/>
+select ?graph ?mariner ?name ?capcity ?age ?dob ?placeOfBirth ?num ?shipName ?docDate where {
+  graph ?graph {?joinEvent lla:hasCapacity ?capcity .
+  ?capcity bds:search "master" .
+  optional { ?joinEvent dc:date ?docDate }
+  ?joinEvent lla:involvesMariner ?mariner .
+  ?mariner foaf:name ?name .
+  ?joinEvent lla:recordedIn ?logbookline .
+  optional { ?logbookline lla:logbookAge ?age } .
+  optional { 
+    ?mariner bio:Birth ?birthEvent .
+    optional { ?birthEvent bio:place ?placeOfBirth } 
+    optional { ?birthEvent dc:date ?dob }
+    }
+  ?joinEvent lla:involvesShip ?ship .
+  ?ship lla:officialnumber ?num .
+  ?ship rdfs:label ?shipName
+    }    
+} 
